@@ -1,7 +1,10 @@
 const express = require('express')
 const app = express()
-var cors = require('cors')
-const port = 3000
+const cors = require('cors');
+
+const DEV_MODE = process.argv[2] && process.argv[2] == "--dev";
+const DEFAULT_PORT = DEV_MODE ? 3000 : 443;
+const PORT = process.env.PORT || DEFAULT_PORT;
 
 const db = require("./db");
 let sessionModel = require("./models/session");
@@ -71,4 +74,4 @@ app.post('/read', (req, res) => {
     });
 });
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(PORT, () => console.log(`meteor-server listening on port ${PORT}`))
