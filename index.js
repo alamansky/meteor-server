@@ -22,6 +22,7 @@ app.post('/read', (req, res) => {
 
     let newSession = sessionModel({ sessionID: req.body.sessionID, reads: req.body.history, fsr: req.body.fsr });
     newSession.save();
+    return res.status(200).end();
 });
 
 app.listen(PORT, () => console.log(`meteor-server listening on port ${PORT}`))
