@@ -19,59 +19,9 @@ app.get('/read', async (req, res) => {
 })
 
 app.post('/read', (req, res) => {
-    //console.log(req.body);
 
-    let read = {
-        correct: req.body.correct,
-        providedRead: req.body.read,
-        userRead: req.body.userRead
-    }
-    sessionModel.findOneAndUpdate({ sessionID: req.body.sessionID }, { $push: { reads: read } }, (err, session) => {
-
-        if (err) {
-            console.log(err);
-        }
-        else if (session) {
-            console.log(session);
-        } else if (!session) {
-            console.log('no session matches that ID. Creating session...');
-            let newSession = sessionModel({ sessionID: req.body.sessionID, read: [{ correct: req.body.correct, providedRead: req.body.read, userRead: req.body.userRead }], fsr: req.body.fsr });
-            newSession
-                .save()
-                .then(session => {
-                    console.log(
-                        `added the following session to database:\n ${JSON.stringify(
-                            session,
-                            null,
-                            2
-                        )}`
-                    );
-                });
-        }
-
-        /*  sessionModel.findOne({ sessionID: req.body.sessionID }, function (err, session) {
-             if (err) {
-                 console.log(err);
-             }
-             else if (session) {
-                 console.log(session);
-             } else if (!session) {
-                 console.log('no sessions match that ID')
-             }
-         }) */
-
-        /* let newSession = sessionModel(req.body);
-        newSession
-          .save()
-          .then(book => {
-            console.log(
-              `added the following book to database:\n ${JSON.stringify(
-                book,
-                null,
-                2
-              )}`
-            ); */
-    });
+    let newSession = sessionModel({ sessionID: req.body.sessionID, reads: req.body.history, fsr: req.body.fsr });
+    newSession.save();
 });
 
 app.listen(PORT, () => console.log(`meteor-server listening on port ${PORT}`))
